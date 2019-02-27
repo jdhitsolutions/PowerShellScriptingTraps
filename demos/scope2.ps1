@@ -6,7 +6,7 @@ Function Pause {
     Param([string]$msg = "Press any key to continue...",
         [switch]$cls)
 
-    Write-Host $msg -foregroundcolor GREEN
+    Write-Host "`n$msg" -foregroundcolor GREEN
 
     $Running = $true
 
@@ -32,6 +32,7 @@ Function Alpha {
     #write the variables to the pipeline
     Write-Host "Alpha output" -ForegroundColor Green
     $Alpha
+    #define the variable in the Global scope which will persist it.
     $global:AlphaGlobal
     Write-Host "Exit Alpha" -ForegroundColor Yellow
 }
@@ -39,7 +40,7 @@ Function Alpha {
 Function Bravo {
     Write-Host "Running Bravo" -ForegroundColor Yellow
     $Bravo = 456
-    #set a script variable
+    #set a variable for the this demo script
     $script:BravoScript = 4
 
     #write the variables to the pipeline
@@ -47,25 +48,25 @@ Function Bravo {
     $Bravo
     $script:BravoScript
 
-    Write-host "Try to access an out of scope variable." -ForegroundColor Green
-    Write-Host "Bravo + Alpha= $($Alpha+$Bravo)"
+    Write-Host "Try to access an out of scope variable. `$Alpha was 123 and `$Bravo was 456" -ForegroundColor Green
+    Write-Host "`$Bravo + `$Alpha = $($Alpha+$Bravo)"
     Write-Host "Exit Bravo" -ForegroundColor Yellow
 
 }
 
 Clear-Host
 Write-Host "Here are the functions defined in this script" -ForegroundColor Green
-Write-host "Alpha" -ForegroundColor Cyan
+Write-Host "Alpha" -ForegroundColor Cyan
 $function:Alpha
-Write-host "Bravo" -ForegroundColor Cyan
+Write-Host "Bravo" -ForegroundColor Cyan
 $Function:Bravo
 Pause -cls
 
 #main part of script
-$Main = "I am here"
+$Main = "I was here"
 
-Write-Host "The Main variable exists because I just defined it." -ForegroundColor Green
-write-host "`$main = $main" -ForegroundColor Green
+Write-Host "The Main variable exists because I just defined it in this demo script's scope." -ForegroundColor Green
+Write-Host "`$main = $main"
 
 Pause -cls
 
@@ -75,28 +76,30 @@ Pause -cls
 
 Write-Host "Let's call Bravo function." -ForegroundColor Green
 Bravo
-Write-host "The Alpha variable wasn't found because it only exists in the scope
+pause -cls
+Write-Host "The Alpha variable wasn't found because it only exists in the scope
 of the Alpha function." -foregroundcolor Green
 Pause -cls
 
-Write-host "However, I can save the output from the functions to variables."  -ForegroundColor Green
-Write-host "`$x=Alpha"
-write-host "`$y = Bravo"
+Write-Host "However, I can save the output from the functions to variables."  -ForegroundColor Green
+Write-Host "`$x = Alpha"
+Write-Host "`$y = Bravo"
 $x = Alpha
 $y = Bravo
-write-Host "X+Y=$($x[0]+$y[0])" -foregroundcolor Cyan
+Write-Host "`$X +`$Y = $($x[0]+$y[0])" -foregroundcolor Cyan
 
-write-host "Now this works. `$x and `$y are arrays (because the functions write multiple objects to the pipeline) which is why I used an index number." -ForegroundColor Green
+# $x and `$y are arrays (because the functions write multiple objects to the pipeline) which is why I used an index number."
+Write-Host "Now this works as expected." -ForegroundColor Green
 Pause -cls
 Write-Host "Or I can use variables that are visible in the current scope, ie this demo script." -ForegroundColor Green
-write-host 'Get-Variable Alpha, Bravo, AlphaGlobal, BravoScript -errorAction "SilentlyContinue"' -ForegroundColor Green
+Write-Host 'Get-Variable Alpha, Bravo, AlphaGlobal, BravoScript -errorAction "SilentlyContinue"' -ForegroundColor Green
 
 Get-Variable Alpha, Bravo, AlphaGlobal, BravoScript -errorAction "SilentlyContinue"
-Write-Host "BravoScript+AlphaGlobal=$($BravoScript+$AlphaGlobal )" -foregroundcolor Cyan
+Write-Host "`$BravoScript + `$AlphaGlobal = $($BravoScript+$AlphaGlobal )" -foregroundcolor Cyan
 
-Write-host "Within the functions I specified a scope for AlphaGlobal and BravoScript." -ForegroundColor Green
+Write-Host "Within the functions I specified a scope for AlphaGlobal and BravoScript." -ForegroundColor Green
 Pause -cls
 
-Write-host "The demo script is finished. In your console session now run:
+Write-Host "The demo script is finished. In your console session now run:
   Get-Variable Alpha,Bravo,AlphaGlobal,BravoScript -errorAction 'SilentlyContinue'
 and see what you have. Also be sure to look at Help About_Scopes" -ForegroundColor Green

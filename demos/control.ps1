@@ -1,6 +1,6 @@
 #requires -version 5.1
 
-#this creates a 'viewable' report
+#this creates a 'viewable' text report
 [cmdletbinding()]
 Param([string[]]$Computername)
 

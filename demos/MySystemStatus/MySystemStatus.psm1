@@ -1,6 +1,5 @@
 
-#all of these functions will eventually need error handling and features like parameter validation and
-#help
+#all of these functions will eventually need error handling and features like parameter validation and help
 
 Function Get-MySystemOperatingSystem {
     [cmdletbinding()]
@@ -36,8 +35,10 @@ Function Get-MySystemProcess {
 
     foreach ($computer in $computername) {
 
-        $procs = Get-Process -ComputerName $computer | Where-Object {$_.ws -gt 50mb} |
-            Select-Object MachineName, ID, Name, Handles, WS, VM
+        $procs = Get-Process -ComputerName $computer |
+        Where-Object {$_.ws -gt 50mb} |
+        Select-Object MachineName, ID, Name, Handles, WS, VM
+
         foreach ($p in $procs) {
 
             [pscustomobject]@{
@@ -93,7 +94,7 @@ Function Get-MySystemService {
     }
 }
 
-#this control script creates an HTML report
+#this control function creates an HTML report
 Function New-MySystemReport {
 
     [cmdletbinding()]
@@ -108,7 +109,6 @@ Function New-MySystemReport {
 
     #calculate a rough runtime for this script
     $begin = Get-Date
-
 
     # get current timezone name
     if ( (Get-Date).IsDaylightSavingTime()) {
@@ -136,9 +136,9 @@ Function New-MySystemReport {
         }
 
         <#
-    if there is only a single item it may not be treated as an array which means
-    the count property won't be defined. Using Measure-Object guarantees a count.
-    #>
+        if there is only a single item it may not be treated as an array which means
+        the count property won't be defined. Using Measure-Object guarantees a count.
+        #>
         $fragments += "<H3 title='$(($procs | Measure-Object).count) processes with a WS greater than 50MB'>Top Processes</H3>"
 
         $fragments += $Procs | Sort-Object -Property WS -Descending |
@@ -188,7 +188,7 @@ h3 { font-size:12pt;}
     This can be useful if you set this up as a scheduled job somewhere in your network
     and later forget where it is running. Or the person who set it up leaves and never
     documents the process they enabled.
-#>
+    #>
 
     $end = Get-Date
 
