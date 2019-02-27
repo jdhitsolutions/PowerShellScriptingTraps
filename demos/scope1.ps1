@@ -1,4 +1,3 @@
-cd
 #run this in a console session
 $x = 100
 

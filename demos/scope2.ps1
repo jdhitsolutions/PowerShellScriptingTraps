@@ -1,4 +1,3 @@
-#requires -version 2.0
 
 #Do not run this in the ISE unless you are showing how
 #it affects scope
